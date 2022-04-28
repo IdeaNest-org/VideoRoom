@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ButtonGroup, Button, Fab, Box } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { goEasy } from '../apis/Room.ts';
+import { goEasy } from '../apis/Room';
 import * as uuid from 'uuid';
 // 创建一个 uuid
 // 创建一个room id
@@ -33,7 +33,7 @@ export default function StatusBar({ ...props }) {
             },
         });
         return () => {
-            goEasy.disconnect();
+            goEasy.disconnect({});
         };
     }, []);
     const toggle = () => {
