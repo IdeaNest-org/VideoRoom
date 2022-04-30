@@ -1,4 +1,5 @@
 import GoEasy from 'goeasy';
+
 export const goEasy = GoEasy.getInstance({
     host: 'hangzhou.goeasy.io', //若是新加坡区域：singapore.goeasy.io
     appkey: 'BC-83053a6d8e7e4f54a513bbc96bc050de',
@@ -6,6 +7,7 @@ export const goEasy = GoEasy.getInstance({
 });
 
 export default goEasy;
+
 // /**
 //  * 当前的用户信息
 //  */

@@ -2,33 +2,26 @@ import { useEffect, useState } from 'react';
 import { ButtonGroup, Button, Fab, Box } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { goEasy } from '../apis/Room';
-import * as uuid from 'uuid';
-// 创建一个 uuid
-// 创建一个room id
-function getUid() {
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-        userId = uuid.v4();
-        localStorage.setItem('userId', userId);
-    }
-    return userId;
-}
-function getRoomId() {
-    let roomId = localStorage.getItem('roomId');
-    if (!roomId) {
-        roomId = uuid.v4();
-        localStorage.setItem('userId', roomId);
-    }
-    return roomId;
-}
-function cleanRoomId() {
-    localStorage.setItem('roomId', '');
-}
+import { getRoomId, getUid } from '../utils/user';
+import { confirm } from '../utils/alert';
+
 export default function StatusBar({ ...props }) {
     const [isOpen, setIsOpen] = useState(false);
     const [status, setStatus] = useState('offline');
-    const [roomId, setRoomId] = useState('');
+    const [roomId, setRoomId] = useState(getRoomId());
 
+    const refreshRoomId = () => {
+        setRoomId(getRoomId());
+    };
+    const exitRoom = async () => {
+        if (await confirm({ content: '是否退出房间' })) {
+            setRoomId('');
+        }
+        // if (1) {
+        //     // clearRoomId();
+        //     setRoomId('');
+        // }
+    };
     useEffect(() => {
         connect();
     }, []);
@@ -68,8 +61,27 @@ export default function StatusBar({ ...props }) {
                     variant="contained"
                     aria-label="outlined primary button group"
                 >
-                    <Button onClick={() => {}}>分享</Button>
-                    <Button>状态</Button>
+                    {!roomId && (
+                        <Button
+                            onClick={() => {
+                                refreshRoomId();
+                            }}
+                        >
+                            创建房间
+                        </Button>
+                    )}
+                    {roomId && (
+                        <>
+                            <Button
+                                onClick={() => {
+                                    exitRoom();
+                                }}
+                            >
+                                退出房间
+                            </Button>
+                            <Button>分享</Button>
+                        </>
+                    )}
                 </ButtonGroup>
             )}
             <Fab
