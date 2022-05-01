@@ -18,28 +18,50 @@ interface MessageProps {
 interface ICallbacks {
     [propName: string]: Array<Function>;
 }
+const videoCallbacks: Array<{
+    cb: EventListener;
+    event: keyof HTMLVideoElementEventMap;
+}> = [];
 const debounceIds: { [key: string]: boolean } = {};
-function addListener(event: string, callback = () => {}) {
-    const video = document.querySelector('video');
-    video?.addEventListener(event, () => {
+
+var video: HTMLVideoElement | null;
+
+function getVideo() {
+    if (!video) {
+        video = document.querySelector('video');
+    }
+    return video;
+}
+
+function addListener(
+    event: keyof HTMLVideoElementEventMap,
+    callback = () => {}
+) {
+    const _cb: EventListener = () => {
         if (debounceIds[event]) {
             return (debounceIds[event] = false);
         }
         callback();
+    };
+    videoCallbacks.push({ cb: _cb, event: event });
+    getVideo()?.addEventListener(event, _cb, false);
+}
+
+function removeListener() {
+    videoCallbacks.forEach(({ event, cb }) => {
+        getVideo()?.removeEventListener(event, cb);
     });
 }
-function triggerEvent(
-    event: 'play' | 'pause' | 'timeupdate',
-    res: number | string = ''
-) {
+function triggerEvent(event: 'play' | 'pause' | 'timeupdate', time: number) {
     debounceIds[event] = true;
-    const video = document.querySelector('video');
+    const video = getVideo();
     if (event === 'timeupdate') {
         video &&
-            Math.abs(video.currentTime - Number(res)) > 2 &&
-            (video.currentTime = Number(res));
+            Math.abs(video.currentTime - time) > 3 &&
+            (video.currentTime = time);
         return;
     } else {
+        video && (video.currentTime = time);
         video?.[event]?.();
     }
 
@@ -75,8 +97,8 @@ export default function useStatusBar() {
             ) {
                 setRoomId(query.roomId);
             }
-            setInviteRoomId(query.roomId);
         }
+        setInviteRoomId(query?.roomId || '');
     };
 
     // 是否加入上一次的Room
@@ -130,12 +152,10 @@ export default function useStatusBar() {
             onMessage: (res) => {
                 const { content, channel } = res;
                 if (content && channel === roomId) {
-                    console.log(content, channel);
                     try {
                         let { code, msg, user } = JSON.parse(content);
-                        console.log(callbacks);
+
                         if (code && callbacks[code] && user !== getUid()) {
-                            console.log(res, msg, code);
                             callbacks[code].forEach((cb) => {
                                 cb && cb(msg);
                             });
@@ -291,21 +311,23 @@ export default function useStatusBar() {
         if (roomId) {
             subscribe();
             listenUserOnline();
-            onMessage('play', () => {
-                triggerEvent('play');
+
+            onMessage('play', (time: number) => {
+                triggerEvent('play', time);
             });
-            onMessage('pause', () => {
-                triggerEvent('pause');
+
+            onMessage('pause', (time: number) => {
+                triggerEvent('pause', time);
             });
+
             onMessage('timeupdate', (res: number) => {
-                // const video = document.querySelector('video');
-                // video && (video.currentTime = res);
-                triggerEvent('timeupdate', res);
+                inviteRoomId && triggerEvent('timeupdate', res);
             });
+
             addListener(
                 'timeupdate',
                 throttle(() => {
-                    const video = document.querySelector('video');
+                    const video = getVideo();
                     sendMessage({
                         code: 'timeupdate',
                         msg: video?.currentTime,
@@ -313,16 +335,17 @@ export default function useStatusBar() {
                 }, 3000)
             );
             addListener('play', () => {
-                sendMessage({ code: 'play' });
+                sendMessage({ code: 'play', msg: getVideo()?.currentTime });
             });
             addListener('pause', () => {
-                sendMessage({ code: 'pause' });
+                sendMessage({ code: 'pause', msg: getVideo()?.currentTime });
             });
         }
         return () => {
             // 取消的是老的 roomId;
             unListenUserOnline(roomId);
             unSubscribe(roomId);
+            removeListener();
         };
         // eslint-disable-next-line
     }, [roomId]);
