@@ -16,6 +16,17 @@ export default function StatusBar({ ...props }) {
         isInRoom,
         userList = [],
     } = useStatusBar();
+    const location = window.location;
+    const search = location.search
+        ? location.search.replace('?', '?roomId=' + roomId + '&')
+        : '?roomId=' + roomId;
+    const shareLink =
+        location.protocol +
+        '//' +
+        location.hostname +
+        location.pathname +
+        search +
+        location.hash;
     return (
         <Box {...props}>
             {isOpen && (
@@ -45,7 +56,7 @@ export default function StatusBar({ ...props }) {
                                 onCopy={() => {
                                     alert('分享链接复制成功');
                                 }}
-                                text={`http://localhost:3000?roomId=${roomId}`}
+                                text={`${shareLink}`}
                             >
                                 <Button>分享</Button>
                             </CopyToClipboard>
