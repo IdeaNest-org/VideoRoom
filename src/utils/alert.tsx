@@ -16,18 +16,26 @@ export interface ConfirmProps {
     onOk?: Function;
 }
 
+// TODO 做一个池子
+let isAlert = false;
 export function confirm(
-    props: ConfirmProps = { title: '提示', content: '请确认' }
+    props: ConfirmProps = { title: '提示', content: '请确认?' }
 ) {
+    if (isAlert) {
+        return;
+    }
+    isAlert = true;
     const promise = new Promise((resolve, reject) => {
         const confirmDialog = (
             <ConfirmDialog
                 {...props}
                 onCancel={() => {
                     resolve(false);
+                    isAlert = false;
                 }}
                 onOk={() => {
                     resolve(true);
+                    isAlert = false;
                 }}
             ></ConfirmDialog>
         );
@@ -39,7 +47,6 @@ export function confirm(
         }
         createRoot(dialogElement).render(confirmDialog);
     });
-
     return promise;
 }
 

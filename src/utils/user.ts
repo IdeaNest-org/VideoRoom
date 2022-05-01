@@ -13,13 +13,19 @@ export function getUid() {
 // 创建一个room id
 export function getRoomId() {
     let roomId = localStorage.getItem('roomId');
-    if (!roomId) {
-        roomId = uuid.v4();
-        localStorage.setItem('userId', roomId);
-    }
+    return roomId || '';
+}
+
+export function storeRoomId(id: string) {
+    localStorage.setItem('roomId', id);
+}
+//
+// 创建一个room id
+export function createRoomId() {
+    const roomId = uuid.v4();
     return roomId;
 }
-// 创建一个room id
+
 export function clearRoomId() {
     localStorage.setItem('roomId', '');
 }
