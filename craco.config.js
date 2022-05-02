@@ -27,23 +27,23 @@ module.exports = {
                 // popup
                 new HtmlWebpackPlugin({
                     inject: true,
-                    chunks: ['main'],
+                    chunks: [],
                     template: './public/index.html',
                     filename: 'index.html',
                 }),
-                new HtmlWebpackPlugin({
-                    inject: true,
-                    chunks: ['controller'],
-                    template: './public/index.html',
-                    filename: 'controller.html',
-                }),
+                // new HtmlWebpackPlugin({
+                //     inject: true,
+                //     chunks: ['controller'],
+                //     template: './public/index.html',
+                //     filename: 'controller.html',
+                // }),
                 new CopyPlugin({
                     patterns: [
                         {
                             from: resolve(
                                 './public/(controller|manifest|logo).js'
                             ),
-                            to: resolve('./build/'),
+                            to: resolve('./build/[name].js'),
                         },
                     ],
                 }),

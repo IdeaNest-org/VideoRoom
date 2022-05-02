@@ -12,4 +12,5 @@ function addIframe(src) {
     document.getElementsByTagName('body')[0].appendChild(script);
     iframe.src = src;
 }
-loadJs('http://localhost:3000/static/controller.js');
+const appUrl = 'http://localhost:3000/';
+loadJs(appUrl + 'static/controller.js');

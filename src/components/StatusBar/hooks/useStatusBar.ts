@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { goEasy, connect, disconnect } from '../../../apis/Room';
 import {
     getRoomId,
@@ -24,17 +24,23 @@ const videoCallbacks: Array<{
 }> = [];
 const debounceIds: { [key: string]: boolean } = {};
 
-var video: HTMLVideoElement | null;
-
+// 获取当前页面最大的
 function getVideo() {
-    if (!video) {
-        video = document.querySelector('video');
+    const videos = document.querySelectorAll('video');
+    let video = null;
+    let width = 0;
+    for (var i = 0; i < videos.length; i++) {
+        let size = window.getComputedStyle(videos[i], null);
+        if (!video || Number(size.width) > width) {
+            video = videos[i];
+            width = Number(size.width);
+        }
     }
-    console.log(video);
     return video;
 }
 
 function addListener(
+    video: HTMLVideoElement | null,
     event: keyof HTMLVideoElementEventMap,
     callback = () => {}
 ) {
@@ -45,17 +51,22 @@ function addListener(
         callback();
     };
     videoCallbacks.push({ cb: _cb, event: event });
-    getVideo()?.addEventListener(event, _cb, false);
+    video?.addEventListener(event, _cb, false);
 }
 
-function removeListener() {
+function removeListener(video: HTMLVideoElement | null) {
     videoCallbacks.forEach(({ event, cb }) => {
-        getVideo()?.removeEventListener(event, cb);
+        video?.removeEventListener(event, cb);
     });
 }
-function triggerEvent(event: 'play' | 'pause' | 'timeupdate', time: number) {
+
+function triggerEvent(
+    video: HTMLVideoElement | null,
+    event: 'play' | 'pause' | 'timeupdate',
+    time: number
+) {
     debounceIds[event] = true;
-    const video = getVideo();
+
     if (event === 'timeupdate') {
         video &&
             Math.abs(video.currentTime - time) > 3 &&
@@ -70,6 +81,7 @@ function triggerEvent(event: 'play' | 'pause' | 'timeupdate', time: number) {
         debounceIds[event] = false;
     }, 100);
 }
+
 export default function useStatusBar() {
     const [isOpen, setIsOpen] = useState(false);
     const [status, setStatus] = useState('offline');
@@ -79,8 +91,10 @@ export default function useStatusBar() {
     const [userList, setUserList] = useState<any[]>([]);
     const { pubsub } = goEasy;
 
-    const callbacks: ICallbacks = useMemo(() => {
-        return {};
+    const callbacks: { current: ICallbacks } = useRef({});
+
+    const video = useMemo(() => {
+        return getVideo();
     }, []);
 
     // 检测是否被邀请
@@ -156,8 +170,12 @@ export default function useStatusBar() {
                     try {
                         let { code, msg, user } = JSON.parse(content);
 
-                        if (code && callbacks[code] && user !== getUid()) {
-                            callbacks[code].forEach((cb) => {
+                        if (
+                            code &&
+                            callbacks.current[code] &&
+                            user !== getUid()
+                        ) {
+                            callbacks.current[code].forEach((cb) => {
                                 cb && cb(msg);
                             });
                         }
@@ -267,11 +285,11 @@ export default function useStatusBar() {
     // 监听消息
     const onMessage = (code: string, callback: Function) => {
         if (code && callback) {
-            if (!callbacks[code]) {
-                callbacks[code] = [];
+            if (!callbacks.current[code]) {
+                callbacks.current[code] = [];
             }
-            if (!callbacks[code].includes(callback)) {
-                callbacks[code].push(callback);
+            if (!callbacks.current[code].includes(callback)) {
+                callbacks.current[code].push(callback);
             }
             return;
         }
@@ -294,7 +312,7 @@ export default function useStatusBar() {
 
     const unInit = async () => {
         await disconnect();
-        // callbacks = {};
+        callbacks.current = {};
     };
 
     // 进入页面时候
@@ -312,20 +330,31 @@ export default function useStatusBar() {
         if (roomId) {
             subscribe();
             listenUserOnline();
+        }
+        return () => {
+            // 取消的是老的 roomId;
+            unListenUserOnline(roomId);
+            unSubscribe(roomId);
+        };
+        // eslint-disable-next-line
+    }, [roomId]);
 
+    useEffect(() => {
+        if (video) {
             onMessage('play', (time: number) => {
-                triggerEvent('play', time);
+                triggerEvent(video, 'play', time);
             });
 
             onMessage('pause', (time: number) => {
-                triggerEvent('pause', time);
+                triggerEvent(video, 'pause', time);
             });
 
             onMessage('timeupdate', (res: number) => {
-                inviteRoomId && triggerEvent('timeupdate', res);
+                inviteRoomId && triggerEvent(video, 'timeupdate', res);
             });
 
             addListener(
+                video,
                 'timeupdate',
                 throttle(() => {
                     const video = getVideo();
@@ -335,21 +364,20 @@ export default function useStatusBar() {
                     });
                 }, 3000)
             );
-            addListener('play', () => {
+            addListener(video, 'play', () => {
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });
             });
-            addListener('pause', () => {
+            addListener(video, 'pause', () => {
                 sendMessage({ code: 'pause', msg: getVideo()?.currentTime });
             });
         }
+
         return () => {
-            // 取消的是老的 roomId;
-            unListenUserOnline(roomId);
-            unSubscribe(roomId);
-            removeListener();
+            video && removeListener(video);
+            callbacks.current = {};
         };
         // eslint-disable-next-line
-    }, [roomId]);
+    }, [video, roomId]);
 
     return {
         isOpen,
@@ -362,5 +390,6 @@ export default function useStatusBar() {
         inviteRoomId,
         isInRoom,
         userList,
+        video,
     };
 }

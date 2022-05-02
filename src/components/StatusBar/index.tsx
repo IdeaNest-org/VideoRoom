@@ -14,6 +14,7 @@ export default function StatusBar({ ...props }) {
         status,
         inviteRoomId,
         isInRoom,
+        video,
         userList = [],
     } = useStatusBar();
     const location = window.location;
@@ -27,7 +28,7 @@ export default function StatusBar({ ...props }) {
         location.pathname +
         search +
         location.hash;
-    return (
+    return video ? (
         <Box
             {...props}
             style={{
@@ -81,5 +82,7 @@ export default function StatusBar({ ...props }) {
                 <FavoriteIcon />
             </Fab>
         </Box>
+    ) : (
+        <></>
     );
 }
