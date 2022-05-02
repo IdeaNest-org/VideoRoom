@@ -25,5 +25,5 @@
         "48": "logo.png",
         "128": "logo.png"
     },
-    "content_security_policy": "script-src 'self' 'unsafe-eval' http://localhost:3000; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://demos.focusbe.com http://localhost:3000; object-src 'self'"
 }

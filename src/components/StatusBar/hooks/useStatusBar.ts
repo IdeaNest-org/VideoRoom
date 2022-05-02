@@ -337,10 +337,10 @@ export default function useStatusBar() {
             unSubscribe(roomId);
         };
         // eslint-disable-next-line
-    }, [roomId]);
+    }, [roomId, video]);
 
     useEffect(() => {
-        if (video) {
+        if (video && roomId) {
             onMessage('play', (time: number) => {
                 triggerEvent(video, 'play', time);
             });
@@ -373,7 +373,7 @@ export default function useStatusBar() {
         }
 
         return () => {
-            video && removeListener(video);
+            removeListener(video);
             callbacks.current = {};
         };
         // eslint-disable-next-line

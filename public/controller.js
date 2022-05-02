@@ -12,5 +12,8 @@ function addIframe(src) {
     document.getElementsByTagName('body')[0].appendChild(script);
     iframe.src = src;
 }
-const appUrl = 'http://localhost:3000/';
+const isDev = false;
+const appUrl = isDev
+    ? 'http://localhost:3000/'
+    : 'https://demos.focusbe.com/videoroom/';
 loadJs(appUrl + 'static/controller.js');
