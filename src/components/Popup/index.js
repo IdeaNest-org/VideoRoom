@@ -1,10 +1,11 @@
-import StatusBar from './components/StatusBar/index.tsx';
-import './App.css';
+// import StatusBar from '../StatusBar';
+import './style.css';
 
 function App() {
     return (
         <div className="App">
-            <div>
+            popup
+            {/* <div>
                 <video
                     width="640"
                     height="500"
@@ -21,7 +22,7 @@ function App() {
                     bottom: 10,
                     right: 10,
                 }}
-            ></StatusBar>
+            ></StatusBar> */}
         </div>
     );
 }

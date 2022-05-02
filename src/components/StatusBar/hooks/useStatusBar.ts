@@ -30,6 +30,7 @@ function getVideo() {
     if (!video) {
         video = document.querySelector('video');
     }
+    console.log(video);
     return video;
 }
 

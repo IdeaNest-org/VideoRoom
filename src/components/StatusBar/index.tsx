@@ -28,7 +28,15 @@ export default function StatusBar({ ...props }) {
         search +
         location.hash;
     return (
-        <Box {...props}>
+        <Box
+            {...props}
+            style={{
+                position: 'fixed',
+                right: 20,
+                bottom: 20,
+                zIndex: 1000,
+            }}
+        >
             {isOpen && (
                 <ButtonGroup
                     style={{

@@ -1,15 +1,22 @@
 {
-    "name": "videoRoom",
-    "description": "watch video with your Friends",
+    "name": "Video Room",
+    "description": "Watch video with your Friends",
     "version": "1.0",
     "manifest_version": 2,
-    "action": {
-        "default_popup": "index.html",
-        "default_title": "Settings"
-    },
+    "permissions": ["storage", "http://*/*", "https://*/*"],
+    "content_scripts": [
+        {
+            "matches": ["https://www.mgtv.com/*"],
+            "js": ["controller.js"],
+            "css": [],
+            "run_at": "document_end"
+        }
+    ],
+    "homepage_url": "https://github.com/IdeaNest-org/videoRoom",
     "icons": {
-        "16": "logo192.png",
-        "48": "logo192.png",
-        "128": "logo192.png"
+        "16": "logo.png",
+        "32": "logo.png",
+        "48": "logo.png",
+        "128": "logo.png"
     }
- }
+}
