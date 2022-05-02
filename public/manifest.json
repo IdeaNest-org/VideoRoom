@@ -1,6 +1,15 @@
 {
-    "name": "一起看电视",
+    "name": "videoRoom",
+    "description": "watch video with your Friends",
     "version": "1.0",
-    "description": "一起看电视",
-    "manifest_version": 2
-}
+    "manifest_version": 2,
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "Settings"
+    },
+    "icons": {
+        "16": "logo192.png",
+        "48": "logo192.png",
+        "128": "logo192.png"
+    }
+ }
