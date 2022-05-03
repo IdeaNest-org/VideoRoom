@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
     Switch,
     ThemeProvider,
@@ -13,6 +14,10 @@ const darkTheme = createTheme({
     },
 });
 function App() {
+    const [debug, setDebug] = useState(localStorage.getItem('is_dev') || false);
+    useEffect(() => {
+        localStorage.setItem('is_dev', debug ? debug : '');
+    }, [debug]);
     return (
         <ThemeProvider theme={darkTheme}>
             <Card
@@ -22,8 +27,16 @@ function App() {
             >
                 <FormGroup>
                     <FormControlLabel
-                        control={<Switch name="enable" />}
-                        label="ENABLE"
+                        control={
+                            <Switch
+                                name="enable"
+                                checked={debug}
+                                onChange={(e) => {
+                                    setDebug(e.target.checked);
+                                }}
+                            />
+                        }
+                        label="DEBUG"
                     />
                 </FormGroup>
             </Card>

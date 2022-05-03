@@ -4,11 +4,6 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import useStatusBar from './hooks/useStatusBar';
 
 export default function StatusBar({ ...props }) {
-    // window.chrome.storage.sync.get(['key'], function (result) {
-    //     console.log('Value currently is ' + result.key);
-    // });
-    console.log(window);
-    console.log(window.chrome);
     const {
         isOpen,
         roomId,
