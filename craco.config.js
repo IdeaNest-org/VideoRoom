@@ -43,7 +43,7 @@ module.exports = {
                             from: resolve(
                                 './public/(controller|manifest|logo).js'
                             ),
-                            to: resolve('./build/[name].js'),
+                            to: resolve('./dist/[name].js'),
                         },
                     ],
                 }),
