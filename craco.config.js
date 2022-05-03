@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const resolve = (dir) => path.resolve(__dirname, dir);
 const CopyPlugin = require('copy-webpack-plugin');
-const fs = require('fs-extra');
 
 module.exports = {
     webpack: {
@@ -30,9 +29,7 @@ module.exports = {
                 new CopyPlugin({
                     patterns: [
                         {
-                            from: resolve(
-                                './public/(controller|manifest|logo).js'
-                            ),
+                            from: resolve('./public/(controller|popup).(js)'),
                             to: resolve('./dist/[name].js'),
                         },
                     ],
@@ -40,7 +37,7 @@ module.exports = {
             ],
         },
     },
-    devServer: (devServerConfig, { env, paths, proxy, allowedHost }) => {
+    devServer: (devServerConfig) => {
         return devServerConfig;
     },
 };
