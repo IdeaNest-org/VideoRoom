@@ -1,7 +1,15 @@
 // 实现react 组件的渲染
 import { createRoot } from 'react-dom/client';
 import StatusBar from './components/StatusBar';
-const whiteList = ['mgtv.com', 'bilibili.com', 'youtube.com', 'iqiyi.com'];
+const whiteList = [
+    'mgtv.com',
+    'bilibili.com',
+    'youtube.com',
+    'iqiyi.com',
+    'v.qq.com',
+    'youku.com',
+    'ixigua.com',
+];
 function isInWhiteList(url: string) {
     return whiteList.some((item) => {
         return url.indexOf(item) > -1;
