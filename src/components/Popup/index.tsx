@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Switch,
     ThemeProvider,
@@ -13,10 +13,10 @@ const darkTheme = createTheme({
         mode: 'dark',
     },
 });
-function App() {
-    const [debug, setDebug] = useState(localStorage.getItem('is_dev') || false);
+function Popup() {
+    const [debug, setDebug] = useState(Boolean(localStorage.getItem('is_dev')));
     useEffect(() => {
-        localStorage.setItem('is_dev', debug ? debug : '');
+        localStorage.setItem('is_dev', debug ? 'true' : '');
     }, [debug]);
     return (
         <ThemeProvider theme={darkTheme}>
@@ -44,4 +44,4 @@ function App() {
     );
 }
 
-export default App;
+export default Popup;

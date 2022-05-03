@@ -3,6 +3,7 @@ import path from 'path';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
+import postcss from 'rollup-plugin-postcss';
 
 import {
     chromeExtension,
@@ -32,6 +33,9 @@ export default {
         // Adds a Chrome extension reloader during watch mode
         simpleReloader(),
         resolve(),
+        postcss({
+            plugins: [],
+        }),
         commonjs(),
         typescript(),
         // Empties the output dir before a new build
