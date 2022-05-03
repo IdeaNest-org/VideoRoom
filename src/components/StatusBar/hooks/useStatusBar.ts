@@ -350,17 +350,18 @@ export default function useStatusBar() {
                 inviteRoomId && triggerEvent(video, 'timeupdate', res);
             });
 
-            addListener(
-                video,
-                'timeupdate',
-                throttle(() => {
-                    video.played &&
-                        sendMessage({
-                            code: 'timeupdate',
-                            msg: video?.currentTime,
-                        });
-                }, 10000)
-            );
+            // addListener(
+            //     video,
+            //     'timeupdate',
+            //     throttle(() => {
+            //         video.played &&
+            //             sendMessage({
+            //                 code: 'timeupdate',
+            //                 msg: video?.currentTime,
+            //             });
+            //     }, 10000)
+            // );
+            
             addListener(video, 'play', () => {
                 console.log('play');
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });
