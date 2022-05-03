@@ -339,7 +339,9 @@ export default function useStatusBar() {
 
     useEffect(() => {
         if (video && roomId) {
+            console.log(video);
             onMessage('play', (time: number) => {
+                console.log('play');
                 triggerEvent(video, 'play', time);
             });
 
@@ -355,7 +357,6 @@ export default function useStatusBar() {
                 video,
                 'timeupdate',
                 throttle(() => {
-                    const video = getVideo();
                     sendMessage({
                         code: 'timeupdate',
                         msg: video?.currentTime,
@@ -363,9 +364,11 @@ export default function useStatusBar() {
                 }, 10000)
             );
             addListener(video, 'play', () => {
+                console.log('play')
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });
             });
             addListener(video, 'pause', () => {
+                console.log('pause');
                 sendMessage({ code: 'pause', msg: getVideo()?.currentTime });
             });
         }
