@@ -360,7 +360,7 @@ export default function useStatusBar() {
                         code: 'timeupdate',
                         msg: video?.currentTime,
                     });
-                }, 3000)
+                }, 10000)
             );
             addListener(video, 'play', () => {
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });
