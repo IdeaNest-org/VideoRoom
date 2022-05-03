@@ -262,23 +262,22 @@ export default function useStatusBar() {
 
     // 发布消息
     const sendMessage = ({ code = 'message', msg }: MessageProps) => {
-        userList.length > 0 &&
-            pubsub.publish({
-                channel: roomId, //替换为您自己的channel
-                accessToken: '',
-                message: JSON.stringify({ code, msg, user: getUid() }), //替换为您想要发送的消息内容
-                onSuccess: function () {
-                    console.log(code, 'sended');
-                },
-                onFailed: function (error) {
-                    console.log(
-                        '消息发送失败，错误编码：' +
-                            error.code +
-                            ' 错误信息：' +
-                            error.content
-                    );
-                },
-            });
+        pubsub.publish({
+            channel: roomId, //替换为您自己的channel
+            accessToken: '',
+            message: JSON.stringify({ code, msg, user: getUid() }), //替换为您想要发送的消息内容
+            onSuccess: function () {
+                console.log(code, 'sended');
+            },
+            onFailed: function (error) {
+                console.log(
+                    '消息发送失败，错误编码：' +
+                        error.code +
+                        ' 错误信息：' +
+                        error.content
+                );
+            },
+        });
     };
 
     // 监听消息
