@@ -1,0 +1,22 @@
+{
+    
+    "background": { "scripts": ["background/index.ts"] },
+    "content_scripts": [
+      {
+        "js": ["content/index.tsx"],
+        "matches": ["<all_urls>"],
+        "run_at": "document_start"
+      }
+    ],
+    "browser_action": {"default_icon": "logo.png",
+        "default_title": "Video Room", "default_popup": "pages/popup/index.html" },
+    
+    "homepage_url": "https://github.com/IdeaNest-org/videoRoom",
+    "icons": {
+        "16": "logo.png",
+        "32": "logo.png",
+        "48": "logo.png",
+        "128": "logo.png"
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://demos.focusbe.com http://localhost:3000; object-src 'self'"
+  }  

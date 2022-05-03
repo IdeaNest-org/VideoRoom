@@ -8,7 +8,7 @@ import {
 } from '../../../utils/user';
 import { confirm } from '../../../utils/alert';
 import qs from 'qs';
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 interface MessageProps {
     code?: string;
@@ -48,7 +48,8 @@ function addListener(
         if (debounceIds[event]) {
             return (debounceIds[event] = false);
         }
-        callback();
+        return callback();
+        
     };
     videoCallbacks.push({ cb: _cb, event: event });
     video?.addEventListener(event, _cb, false);
@@ -332,7 +333,7 @@ export default function useStatusBar() {
             subscribe();
             listenUserOnline();
             onMessage('online', () => {
-                console.log('online','getUserList')
+                console.log('online', 'getUserList');
                 getUserList();
             });
         }
@@ -361,7 +362,7 @@ export default function useStatusBar() {
             //             });
             //     }, 10000)
             // );
-            
+
             addListener(video, 'play', () => {
                 console.log('play');
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });

@@ -1,6 +1,7 @@
 // 实现react 组件的渲染
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import StatusBar from './components/StatusBar';
+import StatusBar from '../components/StatusBar';
 const whiteList = [
     'mgtv.com',
     'bilibili.com',
