@@ -139,6 +139,7 @@ export default function useStatusBar() {
             unSubscribe();
             unListenUserOnline();
             setRoomId('');
+            sendMessage({ code: 'online' });
         }
     };
 
@@ -164,6 +165,7 @@ export default function useStatusBar() {
             accessToken: '',
             onMessage: (res) => {
                 const { content, channel } = res;
+                console.log(content, channel);
                 if (content && channel === roomId) {
                     try {
                         let { code, msg, user } = JSON.parse(content);
@@ -182,7 +184,7 @@ export default function useStatusBar() {
             },
             onSuccess: function () {
                 setIsInRoom(true);
-                sendMessage({ msg: 'online' });
+                sendMessage({ code: 'online' });
             },
             onFailed: function (error) {
                 // 提示进入房间失败
@@ -267,7 +269,7 @@ export default function useStatusBar() {
             accessToken: '',
             message: JSON.stringify({ code, msg, user: getUid() }), //替换为您想要发送的消息内容
             onSuccess: function () {
-                console.log(code, 'sended');
+                console.log(code, 'sended' + roomId);
             },
             onFailed: function (error) {
                 console.log(
@@ -306,6 +308,7 @@ export default function useStatusBar() {
         setStatus(status);
         await autoJoinRoom();
         await checkIsInvite();
+        getUserList();
     };
 
     const unInit = async () => {
@@ -328,18 +331,12 @@ export default function useStatusBar() {
         if (roomId) {
             subscribe();
             listenUserOnline();
+            onMessage('online', () => {
+                console.log('online','getUserList')
+                getUserList();
+            });
         }
-        return () => {
-            // 取消的是老的 roomId;
-            unListenUserOnline(roomId);
-            unSubscribe(roomId);
-        };
-        // eslint-disable-next-line
-    }, [roomId, video]);
-
-    useEffect(() => {
         if (video && roomId) {
-            console.log(video);
             onMessage('play', (time: number) => {
                 console.log('play');
                 triggerEvent(video, 'play', time);
@@ -357,28 +354,32 @@ export default function useStatusBar() {
                 video,
                 'timeupdate',
                 throttle(() => {
-                    sendMessage({
-                        code: 'timeupdate',
-                        msg: video?.currentTime,
-                    });
+                    video.played &&
+                        sendMessage({
+                            code: 'timeupdate',
+                            msg: video?.currentTime,
+                        });
                 }, 10000)
             );
             addListener(video, 'play', () => {
-                console.log('play')
+                console.log('play');
                 sendMessage({ code: 'play', msg: getVideo()?.currentTime });
             });
             addListener(video, 'pause', () => {
                 console.log('pause');
                 sendMessage({ code: 'pause', msg: getVideo()?.currentTime });
             });
+            sendMessage({ code: 'online' });
         }
-
         return () => {
+            // 取消的是老的 roomId;
+            unListenUserOnline(roomId);
+            unSubscribe(roomId);
             removeListener(video);
             callbacks.current = {};
         };
         // eslint-disable-next-line
-    }, [video, roomId]);
+    }, [roomId, video]);
 
     return {
         isOpen,
