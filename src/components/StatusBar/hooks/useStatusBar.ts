@@ -107,9 +107,7 @@ export default function useStatusBar() {
             roomId !== query.roomId &&
             query.roomId !== getRoomId()
         ) {
-            if (
-                await confirm({ content: '你的小伙伴一起看视频，是否加入？' })
-            ) {
+            if (await confirm({ content: 'Do you want Join the Room？' })) {
                 setRoomId(query.roomId);
             }
         }
@@ -137,7 +135,7 @@ export default function useStatusBar() {
 
     // 退出房间
     const exitRoom = async () => {
-        if (await confirm({ content: '是否退出房间' })) {
+        if (await confirm({ content: 'Do you want to exit?' })) {
             unSubscribe();
             unListenUserOnline();
             setRoomId('');
@@ -184,7 +182,7 @@ export default function useStatusBar() {
             },
             onSuccess: function () {
                 setIsInRoom(true);
-                sendMessage({ msg: '我上线了' });
+                sendMessage({ msg: 'online' });
             },
             onFailed: function (error) {
                 // 提示进入房间失败
@@ -228,7 +226,7 @@ export default function useStatusBar() {
                             resolve(channels?.[room]);
                         }
                     } else {
-                        reject('获取失败');
+                        reject('failed');
                     }
                 },
                 onFailed: function (error) {

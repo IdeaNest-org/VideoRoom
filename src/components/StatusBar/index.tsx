@@ -48,9 +48,11 @@ export default function StatusBar({ ...props }) {
                 >
                     {!roomId && (
                         <>
-                            <Button onClick={createRoom}>创建房间</Button>
+                            <Button onClick={createRoom}>Creat Room</Button>
                             {inviteRoomId && (
-                                <Button onClick={acceptInvite}>加入邀请</Button>
+                                <Button onClick={acceptInvite}>
+                                    Join
+                                </Button>
                             )}
                         </>
                     )}
@@ -58,16 +60,16 @@ export default function StatusBar({ ...props }) {
                     {roomId && (
                         <>
                             {isInRoom && (
-                                <Button>当前{userList.length}人</Button>
+                                <Button>{userList.length} onLine</Button>
                             )}
-                            <Button onClick={exitRoom}>退出房间</Button>
+                            <Button onClick={exitRoom}>Exit</Button>
                             <CopyToClipboard
                                 onCopy={() => {
-                                    alert('分享链接复制成功');
+                                    alert('link copied to clipboard');
                                 }}
                                 text={`${shareLink}`}
                             >
-                                <Button>分享</Button>
+                                <Button>Room Link</Button>
                             </CopyToClipboard>
                         </>
                     )}

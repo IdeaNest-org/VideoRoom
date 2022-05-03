@@ -6,9 +6,6 @@ const fs = require('fs-extra');
 
 module.exports = {
     webpack: {
-        // alias: {
-        //     '@': resolve('src'),
-        // },
         configure: (webpackConfig, { env, paths }) => {
             webpackConfig.entry = {
                 // 用于页面中控制视频播放
@@ -24,19 +21,12 @@ module.exports = {
         plugins: {
             remove: ['HtmlWebpackPlugin'],
             add: [
-                // popup
                 new HtmlWebpackPlugin({
                     inject: true,
                     chunks: [],
                     template: './public/index.html',
                     filename: 'index.html',
                 }),
-                // new HtmlWebpackPlugin({
-                //     inject: true,
-                //     chunks: ['controller'],
-                //     template: './public/index.html',
-                //     filename: 'controller.html',
-                // }),
                 new CopyPlugin({
                     patterns: [
                         {
@@ -51,10 +41,6 @@ module.exports = {
         },
     },
     devServer: (devServerConfig, { env, paths, proxy, allowedHost }) => {
-        // devServerConfig.devMiddleware.writeToDisk = true;
-        // // devServerConfig.hot = false;
-        // devServerConfig.liveReload = false;
-        // devServerConfig.client.overlay = false;
         return devServerConfig;
     },
 };

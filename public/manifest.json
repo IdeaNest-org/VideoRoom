@@ -3,7 +3,6 @@
     "description": "Watch video with your Friends",
     "version": "1.0",
     "manifest_version": 2,
-
     "permissions": ["storage", "http://*/*", "https://*/*"],
     "browser_action": {
         "default_icon": "logo.png",
