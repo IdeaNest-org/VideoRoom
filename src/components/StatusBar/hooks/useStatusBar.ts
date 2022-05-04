@@ -7,8 +7,9 @@ import {
     storeRoomId,
 } from '../../../utils/user';
 import { confirm } from '../../../utils/alert';
-import qs from 'qs';
+
 import { debounce } from 'lodash';
+const searchParams = new URLSearchParams(window.location.search);
 
 interface MessageProps {
     code?: string;
@@ -49,7 +50,6 @@ function addListener(
             return (debounceIds[event] = false);
         }
         return callback();
-        
     };
     videoCallbacks.push({ cb: _cb, event: event });
     video?.addEventListener(event, _cb, false);
@@ -100,19 +100,13 @@ export default function useStatusBar() {
 
     // 检测是否被邀请
     const checkIsInvite = async () => {
-        const query: { roomId?: string } = qs.parse(
-            window.location.search.replace('?', '')
-        );
-        if (
-            query.roomId &&
-            roomId !== query.roomId &&
-            query.roomId !== getRoomId()
-        ) {
+        const urlRoomId = searchParams.get('roomId') || '';
+        if (urlRoomId && roomId !== urlRoomId && urlRoomId !== getRoomId()) {
             if (await confirm({ content: 'Do you want Join the Room？' })) {
-                setRoomId(query.roomId);
+                setRoomId(urlRoomId);
             }
         }
-        setInviteRoomId(query?.roomId || '');
+        setInviteRoomId(urlRoomId);
     };
 
     // 是否加入上一次的Room
@@ -350,18 +344,6 @@ export default function useStatusBar() {
             onMessage('timeupdate', (res: number) => {
                 inviteRoomId && triggerEvent(video, 'timeupdate', res);
             });
-
-            // addListener(
-            //     video,
-            //     'timeupdate',
-            //     throttle(() => {
-            //         video.played &&
-            //             sendMessage({
-            //                 code: 'timeupdate',
-            //                 msg: video?.currentTime,
-            //             });
-            //     }, 10000)
-            // );
 
             addListener(video, 'play', () => {
                 console.log('play');

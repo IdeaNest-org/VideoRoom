@@ -11,15 +11,14 @@ const whiteList = [
     'youku.com',
     'ixigua.com',
 ];
+
 function isInWhiteList(url: string) {
     return whiteList.some((item) => {
         return url.indexOf(item) > -1;
     });
 }
-function main() {
-    if (!isInWhiteList(window.location.host)) {
-        return;
-    }
+
+if (isInWhiteList(window.location.host)) {
     window.addEventListener('load', () => {
         const container = document.createElement('div');
         container.id = 'video-room-wrapper';
@@ -28,6 +27,3 @@ function main() {
         root.render(<StatusBar />);
     });
 }
-main();
-
-export default main;

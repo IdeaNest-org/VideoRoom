@@ -5,7 +5,7 @@
       {
         "js": ["content/index.tsx"],
         "matches": ["<all_urls>"],
-        "run_at": "document_start"
+        "run_at": "document_end"
       }
     ],
     "browser_action": {"default_icon": "logo.png",
