@@ -4,7 +4,7 @@ import { getUid } from '../utils/user';
 let status = '';
 export const goEasy = GoEasy.getInstance({
     host: 'hangzhou.goeasy.io', //若是新加坡区域：singapore.goeasy.io
-    appkey: 'BC-83053a6d8e7e4f54a513bbc96bc050de',
+    appkey: 'BC-967ce8f186b04b39bf4f180f72220587',
     modules: ['pubsub'], //根据需要，传入‘pubsub’或'im’，或数组方式同时传入
 });
 
