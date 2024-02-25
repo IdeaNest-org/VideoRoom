@@ -1,0 +1,1 @@
+function loadJs(e,t){const o=document.createElement("script");o.src=e,t&&(o.onload=t),document.getElementsByTagName("head")[0].appendChild(o)}const isDev=localStorage.getItem("is_dev"),appUrl=isDev?"http://localhost:3000":"https://videoroom.focusbe.com";loadJs(appUrl+"/static/controller.js");

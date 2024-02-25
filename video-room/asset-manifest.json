@@ -1,0 +1,18 @@
+{
+  "files": {
+    "controller.js": "/controller.js",
+    "main.js": "/static/main.js",
+    "main.css": "/static/css/main.f4b737f5.css",
+    "background.js": "/static/background.js",
+    "index.html": "/index.html",
+    "popup.js": "/popup.js",
+    "controller.js.map": "/static/controller.js.map",
+    "main.js.map": "/static/main.js.map",
+    "main.f4b737f5.css.map": "/static/css/main.f4b737f5.css.map",
+    "background.js.map": "/static/background.js.map"
+  },
+  "entrypoints": [
+    "static/main.js",
+    "static/css/main.f4b737f5.css"
+  ]
+}
