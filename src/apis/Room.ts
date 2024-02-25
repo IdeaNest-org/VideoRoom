@@ -13,7 +13,7 @@ export const connect = (): Promise<string> => {
         if (status) {
             resolve(status);
         }
-        goEasy.connect({
+        (goEasy as any).connect({
             id: getUid(), //pubsub选填，im必填，最大长度60字符
             data: { id: getUid() }, //必须是一个对象，pubsub选填，im必填，最大长度300字符，用于上下线提醒和查询在线用户列表时，扩展更多的属性
             onSuccess: () => {
