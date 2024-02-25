@@ -11,6 +11,7 @@ const whiteList = [
     'ixigua.com',
 ];
 function isInWhiteList(url: string) {
+    return true;
     return whiteList.some((item) => {
         return url.indexOf(item) > -1;
     });
