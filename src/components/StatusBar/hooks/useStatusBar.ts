@@ -221,7 +221,7 @@ export default function useStatusBar() {
                 includeUsers: true, //可选项，是否返回用户列表，默认false
                 distinct: true, //可选项，相同userId的客户端，列表中只保留一个，默认false,
                 onSuccess: function (response) {
-                    const { code, content } = response;
+                    const { code, content } = response ?? {};
                     if (code === 200) {
                         const { channels } = content;
                         if (channels?.[room]) {
@@ -243,14 +243,14 @@ export default function useStatusBar() {
     const listenUserOnline = () => {
         pubsub.subscribePresence({
             channel: roomId,
-            onPresence: function (presenceEvents) {
+            onPresence: function () {
                 // 状态发生变化
                 getUserList();
             },
             onSuccess: function () {
                 getUserList();
             },
-            onFailed: function (error) {},
+            onFailed: function () {},
         });
     };
 
