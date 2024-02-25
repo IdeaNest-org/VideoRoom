@@ -10,5 +10,5 @@ function loadJs(src, cb) {
 const isDev = localStorage.getItem('is_dev');
 const appUrl = isDev
     ? 'http://localhost:3000'
-    : 'https://demos.focusbe.com/videoroom';
+    : 'https://videoroom.focusbe.com';
 loadJs(appUrl + '/static/controller.js');
