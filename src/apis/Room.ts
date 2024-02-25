@@ -7,7 +7,7 @@ export const goEasy = GoEasy.getInstance({
     appkey: 'BC-ac1b818e93b84c12a14326fa9a079a30',
     modules: ['pubsub'], //根据需要，传入‘pubsub’或'im’，或数组方式同时传入
 });
-
+console.log(1111)
 export const connect = (): Promise<string> => {
     return new Promise((resolve, reject) => {
         if (status) {

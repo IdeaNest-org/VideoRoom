@@ -25,6 +25,7 @@ function main() {
         container.id = 'video-room-wrapper';
         document.body.appendChild(container);
         const root = createRoot(container as HTMLElement);
+        console.log('render');
         root.render(<StatusBar />);
     });
 }
