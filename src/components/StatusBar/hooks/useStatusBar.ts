@@ -8,7 +8,7 @@ import {
 } from '../../../utils/user';
 import { confirm } from '../../../utils/alert';
 import qs from 'qs';
-import { debounce, throttle } from 'lodash';
+import { debounce } from 'lodash';
 
 interface MessageProps {
     code?: string;
@@ -89,7 +89,7 @@ export default function useStatusBar() {
     const [inviteRoomId, setInviteRoomId] = useState('');
     const [isInRoom, setIsInRoom] = useState(false);
     const [userList, setUserList] = useState<any[]>([]);
-    const { pubsub } = goEasy;
+    const { pubsub } = goEasy as any;
 
     const callbacks: { current: ICallbacks } = useRef({});
 
