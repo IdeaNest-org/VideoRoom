@@ -27,7 +27,7 @@ const debounceIds: { [key: string]: boolean } = {};
 // 获取当前页面最大的
 function getVideo() {
     const videos = document.querySelectorAll('video');
-    let video = null;
+    let video:any = null;
     let width = 0;
     for (var i = 0; i < videos.length; i++) {
         let size = window.getComputedStyle(videos[i], null);
